@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Persistent Chat</title>
   <link rel="stylesheet" href="style.css" />
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
   <div id="chat-container">
@@ -19,6 +16,7 @@
     </form>
   </div>
 
+  <script src="/socket.io/socket.io.js"></script>
   <script src="main.js" defer></script>
 </body>
 </html>
