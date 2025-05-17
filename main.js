@@ -17,20 +17,32 @@ const form = document.getElementById('form');
 const userInput = document.getElementById('user');
 const input = document.getElementById('input');
 
-// Listen for real-time updates
+// Helper to render a single message
+function renderMessage(msg) {
+  const div = document.createElement('div');
+  div.classList.add('message');
+  const time = msg.timestamp
+    ? msg.timestamp.toDate().toLocaleTimeString()
+    : '...';
+  div.textContent = `[${time}] ${msg.user}: ${msg.text}`;
+  messagesEl.appendChild(div);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+// Listen for real-time updates (initial load + new)
 db.collection('messages')
-  .orderBy('timestamp')
+  .orderBy('timestamp', 'asc')
   .onSnapshot(snapshot => {
-    messagesEl.innerHTML = '';
-    snapshot.forEach(doc => {
-      const msg = doc.data();
-      const div = document.createElement('div');
-      const time = msg.timestamp.toDate().toLocaleTimeString();
-      div.textContent = `[${time}] ${msg.user}: ${msg.text}`;
-      div.classList.add('message');
-      messagesEl.appendChild(div);
+    // On first load, clear container
+    if (snapshot.docChanges().length === snapshot.size) {
+      messagesEl.innerHTML = '';
+    }
+    // Render only added messages
+    snapshot.docChanges().forEach(change => {
+      if (change.type === 'added') {
+        renderMessage(change.doc.data());
+      }
     });
-    messagesEl.scrollTop = messagesEl.scrollHeight;
   });
 
 // Send new message
@@ -40,11 +52,12 @@ form.addEventListener('submit', e => {
   const text = input.value.trim();
   if (!user || !text) return;
 
+  // Add to Firestore (serverTimestamp ensures ordering)
   db.collection('messages').add({
     user,
     text,
     timestamp: firebase.firestore.FieldValue.serverTimestamp()
-  });
+  }).catch(console.error);
 
   input.value = '';
 });
