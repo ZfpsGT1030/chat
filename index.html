@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Persistent Chat</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <div id="chat-container">
+    <div id="messages"></div>
+    <form id="form">
+      <input id="user" placeholder="Your name" required />
+      <input id="input" autocomplete="off" placeholder="Type a message..." required />
+      <button>Send</button>
+    </form>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
